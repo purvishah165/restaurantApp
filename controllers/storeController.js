@@ -7,7 +7,6 @@ const uuid = require('uuid');
 const multerOptions = {
     storage: multer.memoryStorage(),
     fileFilter(req, file, next){
-        console.log('mime---------------',file.mimetype)
         const isPhoto = file.mimetype.startsWith('image/');
         if(isPhoto) {
             next(null, true);
@@ -29,12 +28,10 @@ exports.upload = multer(multerOptions).single('photo');
 
 exports.resize = async(req, res, next)=> {
     //check if there is no file to resize
-    console.log(req.file)
     if(!req.file) {
         next(); //skip to next middleware
         return;
     }
-    console.log(req.file)
     const extension = req.file.mimetype.split('/')[1];
     req.body.photo = `${uuid.v4()}.${extension}`;
     // now we resize
